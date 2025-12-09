@@ -1,7 +1,3 @@
-Berikut adalah contoh **`README.md`** yang profesional, informatif, dan sesuai dengan **deskripsi TUBES Analisis Kompleksitas Algoritma (AKA)** serta topik Anda:
-
----
-
 # 📊 Analisis Perbandingan Efisiensi Algoritma Iteratif dan Rekursif pada Penjadwalan Tugas dengan Strategi Greedy
 
 > **Tugas Besar Mata Kuliah Analisis Kompleksitas Algoritma (AKA)**  
@@ -148,10 +144,3 @@ Proyek ini dibuat untuk keperluan akademik Tugas Besar AKA Telkom University Sur
 > ⚠️ **Catatan**: Pastikan `log.txt` tidak kosong sebelum menjalankan visualisasi!
 
 ---
-
-Jika Anda ingin, saya juga bisa bantu:
-- Generate versi PDF dari README
-- Tambahkan badge build/status (jika deploy CI)
-- Buat template laporan LaTeX berdasarkan struktur ini
-
-Silakan beri tahu!
