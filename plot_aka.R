@@ -1,59 +1,43 @@
-# Load library yang dibutuhkan
-if (!require("readr")) install.packages("readr")
-if (!require("dplyr")) install.packages("dplyr")
-if (!require("ggplot2")) install.packages("ggplot2")
-
-library(readr)
-library(dplyr)
+# Load libraries
 library(ggplot2)
-
-# Baca file log.txt sebagai teks
-log_file <- "log"
-if (!file.exists(log_file)) stop("File 'log.txt' tidak ditemukan!")
-
-lines <- readLines(log_file)
-
-# Ekstrak data menggunakan regex
-data <- do.call(rbind, lapply(lines, function(line) {
-  # Ambil angka setelah N=, Iteratif=, Rekursif=
-  n_match <- regmatches(line, regexpr("N=(\\d+)", line))
-  iter_match <- regmatches(line, regexpr("Iteratif=([\\d.]+)ms", line))
-  rek_match <- regmatches(line, regexpr("Rekursif=([\\d.]+)ms", line))
-  
-  if (length(n_match) > 0 && length(iter_match) > 0 && length(rek_match) > 0) {
-    n_val <- as.numeric(sub("N=", "", n_match))
-    iter_val <- as.numeric(sub("Iteratif=", "", iter_match))
-    rek_val <- as.numeric(sub("Rekursif=", "", rek_match))
-    return(data.frame(N = n_val, Iteratif = iter_val, Rekursif = rek_val))
-  }
-  return(NULL)
-}))
-
-# Hapus NULL rows
-data <- data[!sapply(data, is.null), ]
-data <- bind_rows(data)
-
-# Ubah ke format long untuk ggplot
+library(dplyr)
 library(tidyr)
-data_long <- pivot_longer(data, cols = c(Iteratif, Rekursif), names_to = "Algoritma", values_to = "Waktu_ms")
 
-# Plot grafik
-p <- ggplot(data_long, aes(x = N, y = Waktu_ms, color = Algoritma, shape = Algoritma)) +
-  geom_point(size = 3) +
-  geom_line() +
-  scale_x_log10(name = "Jumlah Tugas (N) - Skala Logaritmik") +
-  scale_y_log10(name = "Waktu Eksekusi (ms) - Skala Logaritmik") +
+# Data dari tabel di laporan (n vs waktu dalam milidetik)
+data <- data.frame(
+  n = c(10, 100, 1000, 10000, 50000, 100000),
+  Iteratif_ms = c(0.001, 0.005, 0.002, 0.018, 0.092, 0.187),
+  Rekursif_ms = c(0.002, 0.008, 0.004, 0.032, 0.165, 0.341)
+)
+
+# Ubah ke format long untuk plotting
+plot_data <- data %>%
+  pivot_longer(
+    cols = c(Iteratif_ms, Rekursif_ms),
+    names_to = "Algoritma",
+    values_to = "Waktu_ms"
+  ) %>%
+  mutate(Algoritma = factor(Algoritma, 
+                            levels = c("Iteratif_ms", "Rekursif_ms"),
+                            labels = c("Iteratif", "Rekursif")))
+
+# Plot
+ggplot(plot_data, aes(x = n, y = Waktu_ms, color = Algoritma, group = Algoritma)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  scale_x_log10(breaks = data$n, labels = scales::comma) +  # log scale karena rentang n sangat lebar
+  scale_y_continuous(trans = 'log10', labels = scales::number_format(accuracy = 0.001)) +
   labs(
-    title = "Perbandingan Running Time: Algoritma Iteratif vs Rekursif",
-    subtitle = "Penjadwalan Tugas dengan Strategi Shortest Job First (SJF)",
-    color = "Algoritma",
-    shape = "Algoritma"
+    title = "Perbandingan Waktu Eksekusi: Algoritma Iteratif vs Rekursif",
+    subtitle = "Pada Penjadwalan Tugas dengan Optimasi Waktu Tunggu (SJF)",
+    x = "Jumlah Tugas (n)",
+    y = "Waktu Eksekusi (milidetik, skala log)",
+    color = "Algoritma"
   ) +
   theme_minimal(base_size = 12) +
-  theme(legend.position = "right")
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    legend.position = "top"
+  )
 
-# Tampilkan grafik
-print(p)
-
-# Simpan grafik
-ggsave("grafik_perbandingan_R.png", plot = p, width = 10, height = 6, dpi = 300)
