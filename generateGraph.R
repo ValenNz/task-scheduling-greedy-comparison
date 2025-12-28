@@ -1,3 +1,5 @@
+#Untuk generate grafik menggunakan R
+
 # Load libraries
 library(ggplot2)
 library(dplyr)
