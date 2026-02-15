@@ -1,11 +1,5 @@
 # 📊 Analisis Perbandingan Efisiensi Algoritma Iteratif dan Rekursif pada Penjadwalan Tugas dengan Strategi Greedy
 
-> **Tugas Besar Mata Kuliah Analisis Kompleksitas Algoritma (AKA)**  
-> Program Studi Informatika – Telkom University Surabaya  
-> Semester Ganjil 2025/2026
-
----
-
 ## 🎯 Tujuan
 Membandingkan efisiensi **algoritma iteratif** dan **rekursif** dalam menyelesaikan masalah **penjadwalan tugas (task scheduling)** menggunakan strategi **Shortest Job First (SJF)** untuk meminimalkan **total waktu tunggu (waiting time)**. Analisis mencakup:
 - Perhitungan kompleksitas waktu asimtotik (Big-O)
@@ -119,15 +113,6 @@ Apakah Anda ingin memasukkan data lagi? (y/n): n
   - Rekursif: overhead stack call, berisiko stack overflow pada `N > 100.000`
 - **Kesimpulan**:  
   > **Algoritma iteratif lebih efisien dalam praktik**, meskipun kelas kompleksitasnya sama.
-
----
-
-## 👥 Anggota Kelompok
-- Nuevalen Refitra Alswando  
-- Haniel Juanta Sembiring
-- Farrellino Ulung Satya Amando 
-
----
 
 ## 📄 Referensi
 1. Cormen, T. H., et al. *Introduction to Algorithms* (3rd ed.)  
